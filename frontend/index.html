@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Love Calculator</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #ffe6f0; text-align: center; padding: 50px; }
+  input { padding: 10px; margin: 10px; border-radius: 6px; border: 1px solid #ccc; }
+  button { padding: 10px 20px; background: #ff4b7d; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  button:hover { background: #e03866; }
+  #result { font-size: 24px; margin-top: 20px; color: #d6336c; }
+</style>
+</head>
+<body>
+  <h1>💕 Love Calculator</h1>
+  <input id="name1" placeholder="Your name">
+  <input id="name2" placeholder="Their name">
+  <br>
+  <button onclick="calculate()">Calculate</button>
+  <div id="result"></div>
+
+<script>
+const API_URL = 'YOUR_BACKEND_URL/api/calculate';
+
+async function calculate() {
+  const name1 = document.getElementById('name1').value;
+  const name2 = document.getElementById('name2').value;
+  const resultDiv = document.getElementById('result');
+
+  if (!name1 || !name2) {
+    resultDiv.textContent = 'Please enter both names!';
+    return;
+  }
+
+  resultDiv.textContent = 'Calculating...';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name1, name2 })
+    });
+    const data = await response.json();
+    resultDiv.textContent = `${name1} + ${name2} = ${data.score}% match!`;
+  } catch (err) {
+    resultDiv.textContent = 'Error reaching the server.';
+  }
+}
+</script>
+</body>
+</html>
